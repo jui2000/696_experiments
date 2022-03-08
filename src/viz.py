@@ -9,7 +9,7 @@ def loss_visualize(train_loss):
 	return None
 
 def acc_visualize(accuracies, labels):
-	for i in len(accuracies):
+	for i in range(len(accuracies)):
 		plt.plot(accuracies[i], label=labels[i])
 		plt.xlabel("Iterations")
 		plt.ylabel("Accuracy")
