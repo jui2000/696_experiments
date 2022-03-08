@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def loss_visualize(train_loss):
-	plt.plot(loss)
+	plt.plot(train_loss)
 	plt.xlabel("Iterations")
 	plt.ylabel("Loss")
 	plt.savefig("figures/train_loss.pdf")
