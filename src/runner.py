@@ -3,11 +3,14 @@ import torch
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 
-def train(model, train_loader, optimizer, num_epochs, criterion):
+def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
     model.train()
     y_true = []
     y_pred = []
 
+    loss_all_epochs = []
+    tr_acc_all_epochs = []
+    val_acc_epochs = []
     for epoch_ in tqdm(range(num_epochs)):
       total_loss = 0
       total_acc = 0
@@ -35,15 +38,13 @@ def train(model, train_loader, optimizer, num_epochs, criterion):
           y_pred.extend(pred.tolist())
           y_true.extend(target.tolist())
 
-          # print("Accuracy on training set is" ,         
-          # accuracy_score(y_true,y_pred))
-
           total_acc += accuracy_score(y_true,y_pred)
 
-      print("Loss: ", total_loss/counter)
-      print("Accuracy: ", total_acc/counter)
 
-      return model, total_loss, total_acc
+      val_acc_epochs.append(test(model, valloader))
+      loss_all_epochs.append(total_loss/counter)
+      tr_acc_all_epochs.append(total_acc/counter)
+      return model, loss_all_epochs, tr_acc_all_epochs, val_acc_epochs
 
 
 #TESTING THE MODEL
@@ -70,6 +71,5 @@ def test(model, test_loader):
             y_true.extend(target.tolist()) 
             y_pred.extend(pred.reshape(-1).tolist())
     
-            
-    print("Accuracy on test set is" , accuracy_score(y_true,y_pred))
-    print("***********************************************************")
+    return accuracy_score(y_true,y_pred)
+    

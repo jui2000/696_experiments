@@ -23,7 +23,7 @@ testset = dataset(X_test, y_test)
 
 #DataLoader
 trainloader = DataLoader(trainset,batch_size=64,shuffle=True)
-testloader = DataLoader(testset,batch_size=64,shuffle=True)
+valloader = DataLoader(testset,batch_size=64,shuffle=True)
 
 
 ######################### Hyper-parameters #########################
@@ -38,10 +38,11 @@ model = LinearModel(input_size, hidden_size, out_size)
 criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-model, total_loss, total_acc = train(model, trainloader, optimizer, num_epochs, criterion)
+model, tr_loss, tr_acc, val_acc = train(model, trainloader, valloader, \
+						optimizer, num_epochs, criterion)
 
-loss_visualize(total_loss)
-acc_visualize([total_acc], ["training accuracy"])
+loss_visualize(tr_loss)
+acc_visualize([tr_acc, val_acc], ["training accuracy", "validation accuracy"])
 
 # test(model, testloader)
 
