@@ -12,19 +12,15 @@ def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
     tr_acc_all_epochs = []
     val_acc_epochs = []
     for epoch_ in tqdm(range(num_epochs)):
-        total_loss = 0
-        total_acc = 0
+        total_loss = []
+        total_acc = []
 
-        counter = 0
         for i in train_loader:
-            counter += 1
-
             data, target = i
-
             #FORWARD PASS
             output = model(data.float())
             loss = criterion(output, target.unsqueeze(1)) 
-            total_loss += loss.detach()
+            total_loss.append(loss.cpu().detach())
 
             #BACKWARD AND OPTIMIZE
             optimizer.zero_grad()
@@ -33,17 +29,17 @@ def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
             optimizer.step()
 
             # PREDICTIONS 
-            pred = np.round(output.detach())
-            target = np.round(target.detach())             
+            pred = np.round(output.cpu().detach().numpy())
+            target = np.round(target.cpu().detach().numpy())             
             y_pred.extend(pred.tolist())
             y_true.extend(target.tolist())
 
-            total_acc += accuracy_score(y_true,y_pred)
+            total_acc.append(accuracy_score(y_true,y_pred))
 
 
         val_acc_epochs.append(test(model, valloader))
-        loss_all_epochs.append(total_loss/counter)
-        tr_acc_all_epochs.append(total_acc/counter)
+        loss_all_epochs.append(np.mean(total_loss))
+        tr_acc_all_epochs.append(np.mean(total_acc))
     return model, loss_all_epochs, tr_acc_all_epochs, val_acc_epochs
 
 
@@ -66,8 +62,8 @@ def test(model, test_loader):
             output = model(data.float())
                        
             #PREDICTIONS
-            pred = np.round(output)
-            target = target.float()
+            pred = np.round(output.cpu().numpy())
+            target = target.cpu().numpy()
             y_true.extend(target.tolist()) 
             y_pred.extend(pred.reshape(-1).tolist())
     
