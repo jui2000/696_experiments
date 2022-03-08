@@ -40,7 +40,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 model, total_loss, total_acc = train(model, trainloader, optimizer, num_epochs, criterion)
 
-loss_visualize(train_loss)
+loss_visualize(total_loss)
 acc_visualize([total_acc], ["training accuracy"])
 
 # test(model, testloader)
