@@ -1,7 +1,9 @@
 import numpy as np
 import torch
+import torch.nn as nn
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
 
 def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
     model.train()
@@ -16,6 +18,9 @@ def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
 
         for i in train_loader:
             data, target = i
+            # plt.scatter(data[target==0,0].cpu(), data[target==0,1].cpu())
+            # plt.scatter(data[target==1,0].cpu(), data[target==1,1].cpu())
+            # plt.show()
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -45,6 +50,8 @@ def test(model, test_loader):
     y_true = []
     y_pred = []
     
+    sigmoid = nn.Sigmoid()
+
     # set the requires_grad flag to false as we are in the test mode
     with torch.no_grad():
         for i in test_loader:
@@ -53,6 +60,7 @@ def test(model, test_loader):
             
             # the model on the data
             output = model(data)
+            output = sigmoid(output)
                        
             #PREDICTIONS
             pred = np.round(output.cpu().numpy())

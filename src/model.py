@@ -15,4 +15,5 @@ class LinearModel(nn.Module):
         out = F.relu(self.fc1(x))
         out = F.relu(self.fc2(out))
         out = self.fc3(out)
+
         return out
