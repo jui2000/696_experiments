@@ -15,7 +15,7 @@ def acc_visualize(accuracies, labels, title):
 	plt.title(title)
 	for i in range(len(accuracies)):
 		plt.plot(accuracies[i], label=labels[i])
-		plt.xlabel("Iterations")
+		plt.xlabel("Epochs")
 		plt.ylabel("Accuracy")
 		plt.legend(loc="upper right")
 		plt.savefig("figures/train_accuracies.pdf")			

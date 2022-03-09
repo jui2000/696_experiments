@@ -13,7 +13,7 @@ from src.viz import loss_visualize, acc_visualize
 input_size = 2
 hidden_size = [40,20]
 out_size = 1 
-num_epochs = 1000
+num_epochs = 1500
 learning_rate = 0.001
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
@@ -47,6 +47,6 @@ model, tr_loss, tr_acc, val_acc = train(model, trainloader, valloader, \
 loss_visualize(tr_loss, "Loss vs iteration")
 acc_visualize([tr_acc, val_acc], \
 				["training accuracy", "validation accuracy"], \
-				"Accuracy vs iteration")
+				"Accuracy vs epochs")
 
 
