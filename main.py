@@ -11,21 +11,21 @@ from src.viz import loss_visualize, acc_visualize
 
 ######################### Hyper-parameters #########################
 input_size = 2
-hidden_size = [50,20]
+hidden_size = [20,40,20]
 out_size = 1 
 num_epochs = 10
-learning_rate = 0.1
+learning_rate = 0.05
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-batch_size = 128
+print(device)
+batch_size = 16
 
 
 ########### Loading the dataset #############################
 data_normal = pd.read_csv("data_normal.csv")
-data_normal.columns
-data_normal.sample(10)
 
 X_train, X_test, y_train, y_test = train_test_split(np.array(data_normal[["x_1", "x_2"]]), 
                            np.array(data_normal["y"]), test_size=0.3)
+
 
 trainset = dataset(torch.tensor(X_train,dtype=torch.float32).to(device), \
 					torch.tensor(y_train,dtype=torch.float32).to(device))
@@ -33,13 +33,13 @@ testset = dataset(torch.tensor(X_test,dtype=torch.float32).to(device), \
 					torch.tensor(y_test,dtype=torch.float32).to(device))
 
 #DataLoader
-trainloader = DataLoader(trainset,batch_size=64,shuffle=True)
-valloader = DataLoader(testset,batch_size=64,shuffle=True)
+trainloader = DataLoader(trainset,batch_size=64,shuffle=True,num_workers=10)
+valloader = DataLoader(testset,batch_size=64,shuffle=True,num_workers=10)
 
 # model definition
 model = LinearModel(input_size, hidden_size, out_size).to(device)
 criterion = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
 
 model, tr_loss, tr_acc, val_acc = train(model, trainloader, valloader, \
 						optimizer, num_epochs, criterion)

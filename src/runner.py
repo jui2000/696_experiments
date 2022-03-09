@@ -10,37 +10,33 @@ def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
 
     loss_all_epochs = []
     tr_acc_all_epochs = []
-    val_acc_epochs = []
+    val_acc_all_epochs = []
     for epoch_ in tqdm(range(num_epochs)):
         total_loss = []
-        total_acc = []
 
         for i in train_loader:
             data, target = i
-            #FORWARD PASS
-            output = model(data.float())
-            loss = criterion(output, target.unsqueeze(1)) 
-            total_loss.append(loss.cpu().detach())
 
-            #BACKWARD AND OPTIMIZE
+            # zero the parameter gradients
             optimizer.zero_grad()
-            loss.backward()
 
+            #FORWARD PASS
+            output = model(data)
+            loss = criterion(output, target.unsqueeze(1)) 
+            #BACKWARD AND OPTIMIZE
+            loss.backward()
             optimizer.step()
 
-            # PREDICTIONS 
-            pred = np.round(output.cpu().detach().numpy())
-            target = np.round(target.cpu().detach().numpy())             
-            y_pred.extend(pred.tolist())
-            y_true.extend(target.tolist())
+            total_loss.append(loss.item())
 
-            total_acc.append(accuracy_score(y_true,y_pred))
+        # PREDICTIONS 
+        val_acc_all_epochs.append(test(model, valloader))
+        tr_acc_all_epochs.append(test(model, trainloader))
+        
+        # save the losses
+        loss_all_epochs += total_loss
 
-
-        val_acc_epochs.append(test(model, valloader))
-        loss_all_epochs.append(np.mean(total_loss))
-        tr_acc_all_epochs.append(np.mean(total_acc))
-    return model, loss_all_epochs, tr_acc_all_epochs, val_acc_epochs
+    return model, loss_all_epochs, tr_acc_all_epochs, val_acc_all_epochs
 
 
 #TESTING THE MODEL
