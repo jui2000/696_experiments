@@ -13,7 +13,7 @@ from src.viz import loss_visualize, acc_visualize
 input_size = 2
 hidden_size = [20,40,20]
 out_size = 1 
-num_epochs = 10
+num_epochs = 100
 learning_rate = 0.05
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
@@ -33,8 +33,8 @@ testset = dataset(torch.tensor(X_test,dtype=torch.float32).to(device), \
 					torch.tensor(y_test,dtype=torch.float32).to(device))
 
 #DataLoader
-trainloader = DataLoader(trainset,batch_size=64,shuffle=True,num_workers=10)
-valloader = DataLoader(testset,batch_size=64,shuffle=True,num_workers=10)
+trainloader = DataLoader(trainset,batch_size=64,shuffle=True)
+valloader = DataLoader(testset,batch_size=64,shuffle=True)
 
 # model definition
 model = LinearModel(input_size, hidden_size, out_size).to(device)

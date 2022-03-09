@@ -3,7 +3,7 @@ import torch
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 
-def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
+def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
     model.train()
     y_true = []
     y_pred = []
@@ -30,8 +30,8 @@ def train(model, train_loader, valloader, optimizer, num_epochs, criterion):
             total_loss.append(loss.item())
 
         # PREDICTIONS 
-        val_acc_all_epochs.append(test(model, valloader))
-        tr_acc_all_epochs.append(test(model, trainloader))
+        val_acc_all_epochs.append(test(model, val_loader))
+        tr_acc_all_epochs.append(test(model, train_loader))
         
         # save the losses
         loss_all_epochs += total_loss
