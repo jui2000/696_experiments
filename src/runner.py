@@ -19,7 +19,6 @@ def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
 
             # zero the parameter gradients
             optimizer.zero_grad()
-
             #FORWARD PASS
             output = model(data)
             loss = criterion(output, target.unsqueeze(1)) 
@@ -49,13 +48,11 @@ def test(model, test_loader):
     # set the requires_grad flag to false as we are in the test mode
     with torch.no_grad():
         for i in test_loader:
-            
             #LOAD THE DATA IN A BATCH
             data,target = i
             
-            
             # the model on the data
-            output = model(data.float())
+            output = model(data)
                        
             #PREDICTIONS
             pred = np.round(output.cpu().numpy())

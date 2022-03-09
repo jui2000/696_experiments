@@ -11,12 +11,11 @@ from src.viz import loss_visualize, acc_visualize
 
 ######################### Hyper-parameters #########################
 input_size = 2
-hidden_size = [20,40,20]
+hidden_size = [40,20]
 out_size = 1 
-num_epochs = 100
-learning_rate = 0.05
+num_epochs = 1000
+learning_rate = 0.001
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(device)
 batch_size = 16
 
 
@@ -39,7 +38,7 @@ valloader = DataLoader(testset,batch_size=64,shuffle=True)
 # model definition
 model = LinearModel(input_size, hidden_size, out_size).to(device)
 criterion = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.005)
 
 model, tr_loss, tr_acc, val_acc = train(model, trainloader, valloader, \
 						optimizer, num_epochs, criterion)
