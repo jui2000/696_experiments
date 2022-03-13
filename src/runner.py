@@ -32,6 +32,8 @@ def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
             optimizer.step()
 
             total_loss.append(loss.item())
+        if (epoch_ % 100) == 0:
+            print("Loss: ", np.mean(total_loss))
 
         # PREDICTIONS 
         val_acc_all_epochs.append(test(model, val_loader))

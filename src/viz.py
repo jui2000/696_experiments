@@ -1,16 +1,22 @@
 import matplotlib.pyplot as plt
 
-def loss_visualize(train_loss, title):
+def loss_visualize(train_loss, title, with_clusters = False):
+	path = "figures/baseline/"
+	if with_clusters == True:
+		path = "figures/with_clusters/"
 	plt.clf()
 	plt.plot(train_loss)
 	plt.xlabel("Iterations")
 	plt.ylabel("Loss")
 	plt.title(title)
-	plt.savefig("figures/train_loss.pdf")
+	plt.savefig(path + "train_loss.pdf")
 
 	return None
 
-def acc_visualize(accuracies, labels, title):
+def acc_visualize(accuracies, labels, title, with_clusters = False):
+	path = "figures/baseline/"
+	if with_clusters == True:
+		path = "figures/with_clusters/"
 	plt.clf()
 	plt.title(title)
 	for i in range(len(accuracies)):
@@ -18,5 +24,5 @@ def acc_visualize(accuracies, labels, title):
 		plt.xlabel("Epochs")
 		plt.ylabel("Accuracy")
 		plt.legend(loc="upper right")
-		plt.savefig("figures/train_accuracies.pdf")			
+		plt.savefig(path + "train_accuracies.pdf")			
 	return None

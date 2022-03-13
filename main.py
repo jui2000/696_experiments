@@ -10,7 +10,6 @@ from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
 
 ######################### Hyper-parameters #########################
-input_size = 2
 hidden_size = [40,20]
 out_size = 1 
 num_epochs = 1500
@@ -19,10 +18,23 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
 
 
+# modify this variable as required
+with_clusters = False
+
+if with_clusters:
+    input_cols = ["x_1", "x_2", "cluster"]
+    input_size = 3
+else:
+    input_cols = ["x_1", "x_2"]
+    input_size = 2
+
+
 ########### Loading the dataset #############################
 data_normal = pd.read_csv("data_normal.csv")
 
-X_train, X_test, y_train, y_test = train_test_split(np.array(data_normal[["x_1", "x_2"]]), 
+num_clusters = data_normal.cluster.nunique()
+
+X_train, X_test, y_train, y_test = train_test_split(np.array(data_normal[input_cols]), 
                            np.array(data_normal["y"]), test_size=0.3)
 
 
@@ -36,7 +48,7 @@ trainloader = DataLoader(trainset,batch_size=batch_size,shuffle=True)
 valloader = DataLoader(testset,batch_size=batch_size,shuffle=True)
 
 # model definition
-model = LinearModel(input_size, hidden_size, out_size).to(device)
+model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters).to(device)
 criterion = nn.BCEWithLogitsLoss()
 # criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -44,9 +56,9 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 model, tr_loss, tr_acc, val_acc = train(model, trainloader, valloader, \
 						optimizer, num_epochs, criterion)
 
-loss_visualize(tr_loss, "Loss vs iteration")
+loss_visualize(tr_loss, "Loss vs iteration", with_clusters = with_clusters)
 acc_visualize([tr_acc, val_acc], \
 				["training accuracy", "validation accuracy"], \
-				"Accuracy vs epochs")
+				"Accuracy vs epochs", with_clusters = with_clusters)
 
 
