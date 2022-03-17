@@ -9,6 +9,7 @@ This is the notebook for dataset synthesis
 
 ### Running code
 Do `python main.py`
+For wandb and hyperparameter tuning check main.ipynb
 
 ### Modifications
 1. `src/model.py` contains the model definition
