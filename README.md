@@ -1,15 +1,13 @@
 # 696_experiments
-
-### dataset_synthesis.ipynb
-This is the notebook for dataset synthesis
-
+ 
 ### Data files
-1. data_unif.csv - Data points for all clusters sampled from a uniform distribution
-2. data_norm.csv - Data points for all clusters sampled from a normal distribution with spherical covariance
+`dataset_synthesis.ipynb` is the notebook for dataset synthesis. Following are the datafiles
+1. `data_unif.csv` - Data points for all clusters sampled from a uniform distribution
+2. `data_norm.csv` - Data points for all clusters sampled from a normal distribution with spherical covariance
 
 ### Running code
 Do `python main.py`
-For wandb and hyperparameter tuning check main.ipynb
+For wandb and hyperparameter tuning check `main.ipynb`
 
 ### Modifications
 1. `src/model.py` contains the model definition
