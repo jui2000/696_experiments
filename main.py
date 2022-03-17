@@ -10,7 +10,7 @@ from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
 
 ######################### Hyper-parameters #########################
-hidden_size = [40,20]
+hidden_size = [256,128] #[40,20]
 out_size = 1 
 num_epochs = 1500
 learning_rate = 0.001
