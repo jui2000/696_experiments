@@ -1,0 +1,13 @@
+
+program: main_with_sweep.py
+method: grid
+metric:
+  goal: maximize
+  name: val_acc
+parameters:
+  hidden_size:
+    values: [[256,128], [256,256], [256,64], [512,256], [512,512], [1024,512],[1024,1024],[1024,256], [512,128],[2042,1024],[2042,512],[2042,256]]
+  learning_rate:
+    values: [0.001, 0.01, 0.003]
+  num_epochs:
+    values: [3000, 3500]

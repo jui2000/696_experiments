@@ -8,12 +8,21 @@ from src.model import LinearModel
 from src.data import dataset
 from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
+import wandb
+
 
 ######################### Hyper-parameters #########################
-hidden_size = [256,128] #[40,20]
-out_size = 1 
-num_epochs = 1500
-learning_rate = 0.001
+defaults = dict(
+    hidden_size = [256,128],
+    num_epochs = 3000,
+    learning_rate = 0.01
+)
+wandb.init(config=defaults,project="696ds_deepmind", entity="696ds_deepmind")
+config = wandb.config
+hidden_size = config.hidden_size
+out_size = 1
+num_epochs = config.num_epochs
+learning_rate = config.learning_rate
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 128
 
@@ -60,4 +69,9 @@ loss_visualize(tr_loss, "Loss vs iteration", with_clusters = with_clusters)
 acc_visualize([tr_acc, val_acc], \
 				["training accuracy", "validation accuracy"], \
 				"Accuracy vs epochs", with_clusters = with_clusters)
+best_val_acc = max(val_acc)
+wandb.log({"val_acc": best_val_acc})
+train_metrics = {"loss": tr_loss, "acc": tr_acc}
+wandb.log({"val", train_metrics})
+
 
