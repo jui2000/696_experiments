@@ -9,22 +9,29 @@ from src.data import dataset
 from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
 import wandb
-
+import os
+#os.environ["WANDB_MODE"] = "offline"
 
 ######################### Hyper-parameters #########################
 defaults = dict(
     hidden_size = [256,128],
     num_epochs = 3000,
-    learning_rate = 0.01
+    learning_rate = 0.01,
+    batch_size = 64
 )
-wandb.init(config=defaults,project="696ds_deepmind", entity="696ds_deepmind")
+try:
+    wandb.init(settings=wandb.Settings(start_method='fork'), config=defaults,project="696ds_deepmind", entity="696ds_deepmind")
+except:
+    wandb.init(config = defaults, projects = "696ds_deepmind", entity="696ds_deepmind")
+
 config = wandb.config
 hidden_size = config.hidden_size
 out_size = 1
 num_epochs = config.num_epochs
 learning_rate = config.learning_rate
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-batch_size = 128
+print(device)
+batch_size = config.batch_size
 
 
 # modify this variable as required
@@ -70,8 +77,7 @@ acc_visualize([tr_acc, val_acc], \
 				["training accuracy", "validation accuracy"], \
 				"Accuracy vs epochs", with_clusters = with_clusters)
 best_val_acc = max(val_acc)
-wandb.log({"val_acc": best_val_acc})
-train_metrics = {"loss": tr_loss, "acc": tr_acc}
-wandb.log({"val", train_metrics})
+wandb.log({"val_accuracy": best_val_acc})
+wandb.log({"train_loss": tr_loss, "train_acc": max(tr_acc)})
 
 
