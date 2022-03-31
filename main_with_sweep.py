@@ -20,9 +20,9 @@ defaults = dict(
     batch_size = 64
 )
 try:
-    wandb.init(settings=wandb.Settings(start_method='fork'), config=defaults,project="696ds_deepmind", entity="696ds_deepmind")
+    wandb.init(settings=wandb.Settings(start_method='fork'), config=defaults,project="696ds_deepmind_j", entity="696ds_deepmind")
 except:
-    wandb.init(config = defaults, projects = "696ds_deepmind", entity="696ds_deepmind")
+    wandb.init(config = defaults, projects = "696ds_deepmind_j", entity="696ds_deepmind")
 
 config = wandb.config
 hidden_size = config.hidden_size
@@ -30,12 +30,11 @@ out_size = 1
 num_epochs = config.num_epochs
 learning_rate = config.learning_rate
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(device)
 batch_size = config.batch_size
 
 
 # modify this variable as required
-with_clusters = False
+with_clusters = True if config.with_cluster else False
 
 if with_clusters:
     input_cols = ["x_1", "x_2", "cluster"]
@@ -64,7 +63,7 @@ trainloader = DataLoader(trainset,batch_size=batch_size,shuffle=True)
 valloader = DataLoader(testset,batch_size=batch_size,shuffle=True)
 
 # model definition
-model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters, embed_dim=6).to(device)
+model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters).to(device)
 criterion = nn.BCEWithLogitsLoss()
 # criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
