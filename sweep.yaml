@@ -1,12 +1,12 @@
 
 program: main_with_sweep.py
-method: grid #bayes, dont fix the random seed
+method: bayes
 metric:
   goal: maximize
   name: val_accuracy
 parameters:
   hidden_size:
-    values: [[512,256], [1024,512],[1024,1024],[1024,256], [512,128],[2042,1024],[2042,512],[2042,256]] #Separate
+    values: [[512,256]] #[[512,256], [1024,512],[1024,1024],[1024,256], [512,128],[2042,1024],[2042,512],[2042,256]]
   learning_rate:
     values: [0.001, 0.003, 0.01, 0.03, 0.1, 0.3]
   num_epochs:

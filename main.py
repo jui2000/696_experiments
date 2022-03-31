@@ -10,12 +10,13 @@ from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
 
 ######################### Hyper-parameters #########################
-hidden_size = [256,128] #[40,20]
+hidden_size = [512,256] #[40,20]
 out_size = 1 
-num_epochs = 1500
-learning_rate = 0.001
+num_epochs = 3000
+learning_rate = 0.003
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-batch_size = 128
+print(device)
+batch_size = 64
 
 
 # modify this variable as required
@@ -48,7 +49,7 @@ trainloader = DataLoader(trainset,batch_size=batch_size,shuffle=True)
 valloader = DataLoader(testset,batch_size=batch_size,shuffle=True)
 
 # model definition
-model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters).to(device)
+model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters, embed_dim=6).to(device)
 criterion = nn.BCEWithLogitsLoss()
 # criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -61,3 +62,6 @@ acc_visualize([tr_acc, val_acc], \
 				["training accuracy", "validation accuracy"], \
 				"Accuracy vs epochs", with_clusters = with_clusters)
 
+
+
+print(max(val_acc))

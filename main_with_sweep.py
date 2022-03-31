@@ -10,7 +10,7 @@ from src.runner import train, test
 from src.viz import loss_visualize, acc_visualize
 import wandb
 import os
-#os.environ["WANDB_MODE"] = "offline"
+os.environ["WANDB_MODE"] = "offline"
 
 ######################### Hyper-parameters #########################
 defaults = dict(
@@ -64,7 +64,7 @@ trainloader = DataLoader(trainset,batch_size=batch_size,shuffle=True)
 valloader = DataLoader(testset,batch_size=batch_size,shuffle=True)
 
 # model definition
-model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters).to(device)
+model = LinearModel(input_size, hidden_size, out_size, with_clusters = with_clusters, num_clusters = num_clusters, embed_dim=6).to(device)
 criterion = nn.BCEWithLogitsLoss()
 # criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
