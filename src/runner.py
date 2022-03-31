@@ -4,6 +4,8 @@ import torch.nn as nn
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
     model.train()
@@ -25,13 +27,16 @@ def train(model, train_loader, val_loader, optimizer, num_epochs, criterion):
             # zero the parameter gradients
             optimizer.zero_grad()
             #FORWARD PASS
-            output = model(data)
-            loss = criterion(output, target.unsqueeze(1)) 
+            output = model(data.to(device))
+
+            loss = criterion(output, target.to(device).unsqueeze(1)) 
             #BACKWARD AND OPTIMIZE
             loss.backward()
             optimizer.step()
 
             total_loss.append(loss.item())
+        
+      
         if (epoch_ % 100) == 0:
             print("Loss: ", np.mean(total_loss))
 
@@ -61,7 +66,7 @@ def test(model, test_loader):
             data,target = i
             
             # the model on the data
-            output = model(data)
+            output = model(data.to(device))
             output = sigmoid(output)
                        
             #PREDICTIONS
